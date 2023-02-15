@@ -45,7 +45,7 @@ class ClickbaitVideo:
         self.question_model = question_model
         self.answer_model = answer_model
 
-        self.video_id = yt_url.split("=")[-1].split("?")[0]
+        self.video_id = self._get_video_id(yt_url)
         self.title = self._fetch_title()
         self.transcript = self._get_transcript()
         self.question = self._generate_question_from_title()
@@ -66,6 +66,12 @@ class ClickbaitVideo:
             return f"OpenAI returned an error, most likely because the video transcript is too long. Error message:\n {error}"
 
         return completion.choices[0].text
+
+    def _get_video_id(self, yt_url):
+        if "youtu.be" in yt_url:
+            return yt_url.split("/")[1]
+        else:
+            return yt_url.split("=")[-1].split("?")[0]
 
     def _generate_question_from_title(self, gpt_model="text-davinci-003") -> str:
         completion = openai.Completion.create(
