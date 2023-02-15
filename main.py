@@ -1,11 +1,11 @@
 import os
+
 import openai
-
-openai.api_key = os.getenv("OPENAI_API_KEY")
 import requests
-
 from youtube_transcript_api import YouTubeTranscriptApi
 from youtube_transcript_api.formatters import TextFormatter
+
+openai.api_key = os.getenv("OPENAI_API_KEY")
 
 
 def get_gpt3_summary(title, transcript):

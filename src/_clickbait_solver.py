@@ -1,11 +1,10 @@
-import openai
 import os
-import requests
 
+import openai
+import requests
+from openai.error import OpenAIError
 from youtube_transcript_api import YouTubeTranscriptApi
 from youtube_transcript_api.formatters import TextFormatter
-
-from openai.error import OpenAIError
 
 
 class ClickbaitVideo:
@@ -99,6 +98,3 @@ class ClickbaitVideo:
 
 
 video = ClickbaitVideo("https://www.youtube.com/watch?v=OGfizdtpAA8", os.getenv("OPENAI_API_KEY"))
-
-print(video.question)
-print(video.answer_title_question())
