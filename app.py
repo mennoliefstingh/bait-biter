@@ -14,7 +14,7 @@ class YouTubeURL(BaseModel):
     url: str
 
 
-@app.post("/declickbait_api")
+@app.post("/baitbiter_api")
 def extract_video_info(yt_url: YouTubeURL):
     video = ClickbaitVideo(yt_url.url, api_key)
 
