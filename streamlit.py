@@ -43,8 +43,9 @@ video_url = st.text_input("Try it with a different video!")
 
 if len(video_url) > 1:
     video = ClickbaitVideo(video_url, api_key)
+    st.title(video.title)
     st.image(f"https://img.youtube.com/vi/{video.video_id}/0.jpg")
-    st.write(f"**Implicit question**: *{video.question}*")
+    st.write(f"**Implicit question**: {'*'+video.question+'*'}")
 
     st.write("**GPT3's answer, as extracted from the video:**")
     st.write(video.answer_title_question())
