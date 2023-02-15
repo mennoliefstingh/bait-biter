@@ -45,14 +45,14 @@ if len(video_url) > 1:
     video = ClickbaitVideo(video_url, api_key)
     st.title(video.title)
     st.image(f"https://img.youtube.com/vi/{video.video_id}/0.jpg")
-    st.write(f"**Implicit question**: {'*'+video.question+'*'}")
+    st.write(f"**Implicit question**: {'*'+video.question.strip()+'*'}")
 
     st.write("**GPT3's answer, as extracted from the video:**")
     st.write(video.answer_title_question())
 else:
     # display defaults
-    st.image("https://img.youtube.com/vi/PSrO55KS6VY/0.jpg")
     st.title("These chickens save lives.")
+    st.image("https://img.youtube.com/vi/PSrO55KS6VY/0.jpg")
     st.write("**Implicit question**: *How do these chickens save lives?*")
 
     st.write("**GPT3's answer, as extracted from the video:**")
