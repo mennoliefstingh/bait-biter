@@ -69,7 +69,7 @@ class ClickbaitVideo:
 
     def _get_video_id(self, yt_url):
         if "youtu.be" in yt_url:
-            return yt_url.split("/")[1]
+            return yt_url.split("/")[-1]
         else:
             return yt_url.split("=")[-1].split("?")[0]
 
