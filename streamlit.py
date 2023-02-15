@@ -34,6 +34,7 @@ st.write(
         Luckily, we can now let large language models bite the bait for us. By cleverly using OpenAI's GPT3, we can 
         identify the implicit question that sparks our curiosity and find out what the creators answer to that question is.
         See a demo of the results for Tom Scott's video, or try it yourself by pasting a link to a video in the field below. 
+
         """
 )
 
@@ -45,7 +46,7 @@ if len(video_url) > 1:
     st.image(f"https://img.youtube.com/vi/{video.video_id}/0.jpg")
     st.write(f"**Implicit question**: *{video.question}*")
 
-    st.write("**GPT3's answer, as extracted from the video: **")
+    st.write("**GPT3's answer, as extracted from the video:**")
     st.write(video.answer_title_question())
 else:
     # display defaults
@@ -53,7 +54,7 @@ else:
     st.title("These chickens save lives.")
     st.write("**Implicit question**: *How do these chickens save lives?*")
 
-    st.write("**GPT3's answer, as extracted from the video: **")
+    st.write("**GPT3's answer, as extracted from the video:**")
     st.write(
         """The chickens help keep people in this area of New South Wales
       safe from some nasty diseases, like Murray Valley Encephalitis. It infects
