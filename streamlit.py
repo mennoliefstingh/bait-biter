@@ -31,8 +31,6 @@ elif len(video_url) > 1:
         video = ClickbaitVideo(video_url, api_key, answer_model_type=answer_model_type)
         try:
             answer = video.answer_title_question()
-            st.write(f"The answer is {type(answer)}")
-            print("answer:", answer)
             results.display_results(video.title, video.video_id, video.question, answer)
             answer_model_type = "text-curie-001"
 
