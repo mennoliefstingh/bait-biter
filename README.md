@@ -31,4 +31,4 @@ After obtaining one, clone the project and open the project folder in your termi
 - Activate it: `source env/bin/activate`
 - Install dependencies: `pip -r requirements.txt`
 - Store your API key as an environment variable: `export OPENAI_API_KEY=[your key]`
-- Run the app: `streamlit run streamlit_app.py`
+- Run the app: `streamlit run streamlit.py`
