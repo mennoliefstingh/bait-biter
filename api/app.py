@@ -3,7 +3,7 @@ import os
 from fastapi import FastAPI
 from pydantic import BaseModel
 
-from src._clickbait_solver import ClickbaitVideo
+from src.clickbait_video import ClickbaitVideo
 
 app = FastAPI()
 
