@@ -84,7 +84,7 @@ class ClickbaitVideo:
         completion = openai.Completion.create(
             model=gpt_model,
             prompt=prompts.question_from_title_prompt(self.title),
-            max_tokens=100,
+            max_tokens=200,
         )
 
         return completion.choices[0].text

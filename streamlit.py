@@ -12,7 +12,8 @@ secret_password = os.getenv("SUPER_SECRET_PASSWORD")
 
 password_entered = False
 
-answer_model_type = "text-curie-001"
+#answer_model_type = "text-curie-001"
+answer_model_type = "text-davinci-003"
 
 st.title("BaitBiter")
 
@@ -25,6 +26,7 @@ video_url = st.text_input("Enter a YouTube URL:")
 if video_url == secret_password:
     intro.markdown(ui_text.password_correct)
     model_type = "text-davinci-003"
+
 elif len(video_url) > 1:
     intro.markdown(ui_text.url_supplied)
     try:
