@@ -18,16 +18,13 @@ def display_results(video_title: str, video_id: str, implicit_question: str, ans
 
 
 def display_example_results() -> None:
-    st.image("https://img.youtube.com/vi/PSrO55KS6VY/0.jpg")
-    st.title("These chickens save lives.")
-    st.write("**Implicit question**: *How do these chickens save lives?*")
-
-    st.write("**GPT3's answer, as extracted from the video:**")
-    st.write(
-        """The chickens help keep people in this area of New South Wales
-      safe from some nasty diseases, like Murray Valley Encephalitis. It infects
-        animals, including humans, and it's carried by mosquitoes. It has no vaccine, 
-        no cure. Most people who get it will suffer fever and nausea, but about one
-          in a thousand will get seriously ill, with a chance of life-changing brain
-            injuries, or death. """
-    )
+    video_id = "jOht6qmuG-k"
+    video_title = "How humans disrupted a cycle essential to all life"
+    implicit_question = "What caused humans to disrupt this cycle essential to all life?"
+    answer = """Humans caused the disruption of Earth's cycle of life by digging up carbon that was trapped
+          in the ground and putting it back into the atmosphere. This caused Earth's temperature
+            to increase rapidly and risk catastrophic warming in a short 12 year span. 
+            To counteract this, humans must stop emitting carbon altogether, 
+            grow more plants, burn plants for energy while capturing their emissions,
+              and build machines to suck out atmospheric carbon. """
+    display_results(video_title, video_id, implicit_question, answer)
