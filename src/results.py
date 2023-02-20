@@ -2,8 +2,16 @@ import streamlit as st
 
 
 def display_results(video_title: str, video_id: str, implicit_question: str, answer: str) -> None:
-    st.image(f"https://img.youtube.com/vi/{video_id}/0.jpg")
-    st.title(video_title)
+
+    col1, col2, col3 = st.columns(3)
+    with col1:
+        st.empty()
+    with col2:
+        st.image(f"https://img.youtube.com/vi/{video_id}/0.jpg", caption=video_title)
+    with col3:
+        st.empty()
+
+    # st.title(f"Video title: {video_title}")
     st.write(f"**Implicit question**: {'*'+implicit_question.strip()+'*'}")
     st.write("**GPT3's answer, as extracted from the video:**")
     st.write(answer)

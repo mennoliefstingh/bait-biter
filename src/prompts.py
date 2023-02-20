@@ -2,11 +2,11 @@
 def answer_question_prompt(transcript: str, question: str) -> str:
     return f"""
             I will give you a transcript of a YouTube video. Afterwards, I will ask you a question 
-            about this video. You will answer this question. 
+            about this video. You will use the transcript to summarize this video and answer the question in 60 words or less.
             Transcript: [{transcript}]
 
             Question: [{question}]
-            Answer: """
+            Summarization and answer (60 words or less): """
 
 
 def question_from_title_prompt(title: str) -> str:
