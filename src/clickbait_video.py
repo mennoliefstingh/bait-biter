@@ -69,7 +69,7 @@ class ClickbaitVideo:
         if "youtu.be" in yt_url:
             return yt_url.split("/")[-1]
         else:
-            return yt_url.split("=")[-1].split("?")[0]
+            return yt_url.split("=")[-1].split("?")[0].split("&")[0]
 
     def _generate_question_from_title(self, gpt_model="text-davinci-003") -> str:
         """

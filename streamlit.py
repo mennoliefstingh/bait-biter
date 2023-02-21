@@ -12,7 +12,7 @@ secret_password = os.getenv("SUPER_SECRET_PASSWORD")
 
 password_entered = False
 
-#answer_model_type = "text-curie-001"
+# answer_model_type = "text-curie-001"
 answer_model_type = "text-davinci-003"
 
 st.title("BaitBiter")
@@ -41,5 +41,7 @@ elif len(video_url) > 1:
 
     except requests.JSONDecodeError:
         st.write("Looks like that's not a valid YouTube URL")
+    except BaseException as error:
+        st.write(ui_text.openai_error_msg(error))
 else:
     results.display_example_results()
