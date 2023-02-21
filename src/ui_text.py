@@ -32,9 +32,7 @@ password_correct = """
 
 def openai_error_msg(error) -> str:
     return f"""
-        OpenAI returned an error, most likely because the video is too long for the text-curie-001 model.
-        text-davinci-003 can handle two times as many tokens, but is also ten times as expensive.
-        If you want, you can ask for the special password to unlock the larger model.
+        OpenAI returned an error: 
 
         Error message: *{error}*
     """
