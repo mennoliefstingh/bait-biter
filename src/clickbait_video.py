@@ -1,7 +1,9 @@
 import openai
 import requests
+import re
 from youtube_transcript_api import YouTubeTranscriptApi
 from youtube_transcript_api.formatters import TextFormatter
+from pytube import extract
 from src import prompts
 
 
@@ -66,10 +68,7 @@ class ClickbaitVideo:
         Returns:
             str: A string containing the video ID extracted from the input URL.
         """
-        if "youtu.be" in yt_url:
-            return yt_url.split("/")[-1]
-        else:
-            return yt_url.split("=")[-1].split("?")[0].split("&")[0]
+        return extract.video_id(yt_url)
 
     def _generate_question_from_title(self, gpt_model="text-davinci-003") -> str:
         """
