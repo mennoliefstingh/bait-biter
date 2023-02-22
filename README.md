@@ -23,7 +23,7 @@ identify the implicit question that sparks our curiosity and find out what the c
 This project leverages OpenAI's GPT3 to do exactly that, while providing a Streamlit-powered front end. 
 
 # Try it yourself
-[Go to this application on Streamlit Cloud](https://mennoliefstingh-bait-biter-streamlit-29cy1g.streamlit.app/)
+[Go to this application on Streamlit Cloud](https://bait-biter.streamlit.app/)
 
 To run the application locally, you need to [generate an OpenAI API key](https://openai.com/join/). 
 After obtaining one, clone the project and open the project folder in your terminal. From there:
