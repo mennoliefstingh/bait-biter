@@ -6,7 +6,7 @@ def answer_question_prompt(transcript: str, question: str) -> str:
             Transcript: [{transcript}]
 
             Question: [{question}]
-            Summarization and answer (60 words or less): """
+            Three sentence summarization and answer (60 words or less): """
 
 
 def question_from_title_prompt(title: str) -> str:
