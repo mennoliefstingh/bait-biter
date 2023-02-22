@@ -22,6 +22,9 @@ intro_text = """
         Luckily, we can now let large language models bite the bait for us. By cleverly using OpenAI's GPT3, we can
         identify the implicit question that sparks our curiosity and find out what the creators answer to that question is.
         See a demo of the results for Tom Scott's video, or try it yourself by pasting a link to a video in the field below.
+
+        Update (22-02-2023):
+        - Video transcripts are now stemmed and stopwords are removed before passing them to GPT-3, allowing for longer videos to be analyzed!
     """
 
 password_correct = """
