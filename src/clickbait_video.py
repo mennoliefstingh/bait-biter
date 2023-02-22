@@ -1,6 +1,5 @@
 import openai
 import requests
-import re
 from youtube_transcript_api import YouTubeTranscriptApi
 from youtube_transcript_api.formatters import TextFormatter
 from pytube import extract
@@ -34,7 +33,7 @@ class ClickbaitVideo:
         self.question_model = question_model
         self.answer_model_type = answer_model_type
 
-        self.video_id = self._get_video_id(yt_url)
+        self.video_id = extract.video_id(self.yt_url)
         self.title = self._fetch_title()
         self.transcript = self._get_transcript()
         self.question = self._generate_question_from_title()
@@ -57,18 +56,6 @@ class ClickbaitVideo:
         )
 
         return completion.choices[0].text
-
-    def _get_video_id(self, yt_url: str) -> str:
-        """
-        Extracts the video ID from a YouTube URL.
-
-        Args:
-            yt_url (str): A string containing a YouTube URL.
-
-        Returns:
-            str: A string containing the video ID extracted from the input URL.
-        """
-        return extract.video_id(yt_url)
 
     def _generate_question_from_title(self, gpt_model="text-davinci-003") -> str:
         """
