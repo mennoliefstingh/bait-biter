@@ -3,7 +3,7 @@ import requests
 from youtube_transcript_api import YouTubeTranscriptApi
 from youtube_transcript_api.formatters import TextFormatter
 from pytube import extract
-from src import prompts
+from bait_biter import _prompts
 
 
 class ClickbaitVideo:
@@ -26,7 +26,7 @@ class ClickbaitVideo:
         yt_url: str,
         api_key: str,
         question_model: str = "text-davinci-003",
-        answer_model_type: str = "text-curie-001",
+        answer_model_type: str = "text-davinci-003",
     ):
         self.yt_url = yt_url
         self.api_key = api_key
@@ -51,7 +51,7 @@ class ClickbaitVideo:
 
         completion = openai.Completion.create(
             model=self.answer_model_type,
-            prompt=prompts.answer_question_prompt(self.transcript, self.question),
+            prompt=_prompts.answer_question_prompt(self.transcript, self.question),
             max_tokens=100,
         )
 
@@ -69,7 +69,7 @@ class ClickbaitVideo:
         """
         completion = openai.Completion.create(
             model=gpt_model,
-            prompt=prompts.question_from_title_prompt(self.title),
+            prompt=_prompts.question_from_title_prompt(self.title),
             max_tokens=200,
         )
 
