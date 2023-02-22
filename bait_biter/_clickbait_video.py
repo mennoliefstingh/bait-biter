@@ -5,6 +5,13 @@ from youtube_transcript_api.formatters import TextFormatter
 from pytube import extract
 from bait_biter import _prompts
 
+import nltk
+from nltk.stem import PorterStemmer
+from nltk.tokenize import word_tokenize
+from nltk.corpus import stopwords
+
+nltk.download("stopwords")
+
 
 class ClickbaitVideo:
     """
@@ -35,7 +42,7 @@ class ClickbaitVideo:
 
         self.video_id = extract.video_id(self.yt_url)
         self.title = self._fetch_title()
-        self.transcript = self._get_transcript()
+        self.transcript = self._get_edited_transcript()
         self.question = self._generate_question_from_title()
 
     def answer_title_question(self) -> str:
@@ -89,12 +96,30 @@ class ClickbaitVideo:
         data = response.json()
         return data["title"]
 
-    def _get_transcript(self) -> str:
+    def _get_edited_transcript(self) -> str:
         """
         Retrieves the transcript for a YouTube video using the YouTubeTranscriptApi package.
+        Pre-processes the transcript by stemming and removing stopwords.
 
         Returns:
             str: A string containing the formatted transcript of the video.
         """
-        transcript = YouTubeTranscriptApi.get_transcript(self.video_id)
-        return TextFormatter().format_transcript(transcript).replace("\n", " ")
+
+        # Get transcript string
+        tokenized_transcript = word_tokenize(
+            TextFormatter()
+            .format_transcript(YouTubeTranscriptApi.get_transcript(self.video_id))
+            .replace("\n", " ")
+            .replace("\xa0", " ")
+        )
+
+        # Stem transcript
+        stemmed_transcript = [PorterStemmer().stem(word) for word in tokenized_transcript]
+
+        # Remove stopwords
+        stop_words = set(stopwords.words("english"))
+        filtered_transcript = " ".join(
+            [word for word in stemmed_transcript if word.lower() not in stop_words]
+        )
+
+        return filtered_transcript
