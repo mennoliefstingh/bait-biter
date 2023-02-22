@@ -117,9 +117,9 @@ class ClickbaitVideo:
         stemmed_transcript = [PorterStemmer().stem(word) for word in tokenized_transcript]
 
         # Remove stopwords
-        stop_words = set(stopwords.words("english"))
-        filtered_transcript = " ".join(
-            [word for word in stemmed_transcript if word.lower() not in stop_words]
-        )
+        # stop_words = set(stopwords.words("english"))
+        # filtered_transcript = " ".join(
+        #     [word for word in stemmed_transcript if word.lower() not in stop_words]
+        # )
 
-        return filtered_transcript
+        return " ".join(stemmed_transcript)
