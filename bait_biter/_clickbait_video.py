@@ -8,9 +8,8 @@ from bait_biter import _prompts
 import nltk
 from nltk.stem import PorterStemmer
 from nltk.tokenize import word_tokenize
-from nltk.corpus import stopwords
 
-nltk.download("stopwords")
+nltk.download("punkt")
 
 
 class ClickbaitVideo:
@@ -115,11 +114,5 @@ class ClickbaitVideo:
 
         # Stem transcript
         stemmed_transcript = [PorterStemmer().stem(word) for word in tokenized_transcript]
-
-        # Remove stopwords
-        # stop_words = set(stopwords.words("english"))
-        # filtered_transcript = " ".join(
-        #     [word for word in stemmed_transcript if word.lower() not in stop_words]
-        # )
 
         return " ".join(stemmed_transcript)
