@@ -41,12 +41,12 @@ def rename_file(old_name, new_name):
 
 
 # Rename streamlit.py to temp.py
-rename_file("streamlit.py", "temp.py")
+#rename_file("streamlit.py", "temp.py")
 
 from bait_biter.streamlit_app import BaitBiterStreamlitApp
 
 # Rename temp.py back to streamlit.py
-rename_file("temp.py", "streamlit.py")
+#rename_file("temp.py", "streamlit.py")
 
 app = BaitBiterStreamlitApp(os.getenv("OPENAI_API_KEY"))
 
