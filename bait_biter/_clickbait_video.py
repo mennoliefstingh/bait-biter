@@ -3,7 +3,11 @@ import requests
 from youtube_transcript_api import YouTubeTranscriptApi
 from youtube_transcript_api.formatters import TextFormatter
 from pytube import extract
-from bait_biter import _prompts
+from bait_biter import prompts, models_config
+
+import tiktoken
+
+import logging
 
 import nltk
 from nltk.stem import PorterStemmer
@@ -31,20 +35,61 @@ class ClickbaitVideo:
         self,
         yt_url: str,
         api_key: str,
-        question_model: str = "text-davinci-003",
-        answer_model_type: str = "text-davinci-003",
+        gpt_model: str = models_config.SMALL_MODEL,
     ):
+        self.logger = logging.Logger('logger')
+        self.tokenizer = tiktoken.encoding_for_model("gpt-4")
+
         self.yt_url = yt_url
         self.api_key = api_key
-        self.question_model = question_model
-        self.answer_model_type = answer_model_type
+        self.gpt_model = gpt_model
+
+        self.messages = []
 
         self.video_id = extract.video_id(self.yt_url)
         self.title = self._fetch_title()
         self.transcript = self._get_edited_transcript()
-        self.question = self._generate_question_from_title()
+        self._generate_question_from_title()
 
-    def answer_title_question(self) -> str:
+    def count_tokens(self, messages) -> int:
+        """
+        Counts the combined tokens of all messages in self.messages
+        """
+        count = 0
+        for message in messages:
+            count += len(self.tokenizer.encode(message["content"]))
+
+        return count
+    
+    def split_transcript(self, transcript, max_len):
+        """
+        Split the transcript into parts so that the total tokens do not exceed max_len.
+
+        Args:
+            transcript (str): The transcript to split.
+            max_len (int): The maximum allowed tokens in each part.
+
+        Returns:
+            list: A list of transcript parts.
+        """
+        parts = []
+        words = transcript.split()
+        current_part = []
+
+        for word in words:
+            current_part.append(word)
+            if self.count_tokens(current_part) > max_len:
+                current_part.pop()  # remove the last word that caused the overflow
+                parts.append(' '.join(current_part))
+                current_part = [word]  # start a new part with the current word
+
+        # add the last part if it's non-empty
+        if current_part:
+            parts.append(' '.join(current_part))
+
+        return parts
+
+    def answer_title_question(self) -> None:
         """
         Generates an answer to the current question using OpenAI's GPT-3 language model.
 
@@ -55,15 +100,59 @@ class ClickbaitVideo:
             openai.error.OpenAIError: If there is an error while communicating with the OpenAI API.
         """
 
-        completion = openai.Completion.create(
-            model=self.answer_model_type,
-            prompt=_prompts.answer_question_prompt(self.transcript, self.question),
-            max_tokens=100,
+        answer_question_prompt = prompts.answer_question_prompt(self.transcript, self.question)
+        self.messages.append({"role":"user", "content":answer_question_prompt})
+
+        n_tokens = self.count_tokens(self.messages)
+        if models_config.MAX_TOKENS_LARGE_MODEL > n_tokens > models_config.MAX_TOKENS_SMALL_MODEL:
+            model = models_config.LARGE_MODEL
+        elif n_tokens < models_config.MAX_TOKENS_SMALL_MODEL:
+            model = models_config.SMALL_MODEL
+        elif n_tokens > models_config.MAX_TOKENS_LARGE_MODEL: 
+            n_tokens_convo = self.count_tokens(self.messages)
+            max_transcript_len = models_config.MAX_TOKENS_LARGE_MODEL - n_tokens_convo
+
+            self.messages.pop(-1)
+
+            # split the transcript content into parts
+            parts = self.split_transcript(self.transcript, max_transcript_len)
+
+            summarized_parts = []
+
+            for part in parts:
+                # get short summary of the transcript part
+                summary_msgs = []
+                summary_msgs.append({"role":"system", "content":prompts.SUMMARIZE_INSTRUCTION})
+                summary_msgs.append({"role": "user", "content": part})
+
+
+                print(f"Summarization messages:\n{self.messages}")
+                completion = openai.ChatCompletion.create(
+                    model=model,
+                    messages = summary_msgs
+                )
+
+                print('completion summ', completion)
+
+                summarized_parts.append(completion['choices'][0]['message']['content'])
+            
+            # Log summary for verification
+            self.logger.info(f"Summarized parts:\n{' '.join(summarized_parts)}")
+
+            # Set the combined summarized parts as new last message
+            answer_question_prompt = prompts.answer_question_prompt(self.transcript, self.question)
+
+        
+        completion = openai.ChatCompletion.create(
+            model=model,
+            messages = self.messages
         )
+        print("all msgs:", self.messages)
+        #print("completion answer_t_q", completion)
 
-        return completion.choices[0].text
+        return [completion['choices'][0]['message']['content']][0]
 
-    def _generate_question_from_title(self, gpt_model="text-davinci-003") -> str:
+    def _generate_question_from_title(self) -> None:
         """
         Generates a question impliedby the video title using OpenAI's GPT-3 language model.
 
@@ -73,13 +162,23 @@ class ClickbaitVideo:
         Raises:
             openai.error.OpenAIError: If there is an error while communicating with the OpenAI API.
         """
-        completion = openai.Completion.create(
-            model=gpt_model,
-            prompt=_prompts.question_from_title_prompt(self.title),
-            max_tokens=200,
+        self.messages.append({"role":"system", "content": prompts.question_from_title_prompt(self.title)})
+        self.messages.append({"role":"user", "content":self.title})
+
+        completion = openai.ChatCompletion.create(
+            model=self.gpt_model,
+            messages = self.messages
         )
 
-        return completion.choices[0].text
+        print("Completion _generate_q_from_t", completion)
+
+        self.question = completion['choices'][0]['message']['content']
+
+        print(f"self.question: {self.question}")
+        self.logger.info(f"Generated question: {self.question}")
+        
+
+        self.messages.append({"role":"assistant", "content":self.question})
 
     def _fetch_title(self) -> str:
         """
