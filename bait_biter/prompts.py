@@ -8,7 +8,7 @@ SUMMARIZE_INSTRUCTION = """"
             You are an assistant that helps summarize YT video transcripts into a much shorter format. You will get the transcript of part of a YouTube video
             and you will summarize it in less than 100 words. """
 
-def question_from_title_prompt(title: str) -> str:
+def question_from_title_prompt() -> str:
     return f"""
         I am going to give you the clickbaity title of a YouTube video. Think of the first question that comes
         to mind when reading this title.

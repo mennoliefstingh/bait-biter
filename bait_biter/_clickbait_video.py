@@ -162,7 +162,7 @@ class ClickbaitVideo:
         Raises:
             openai.error.OpenAIError: If there is an error while communicating with the OpenAI API.
         """
-        self.messages.append({"role":"system", "content": prompts.question_from_title_prompt(self.title)})
+        self.messages.append({"role":"system", "content": prompts.question_from_title_prompt()})
         self.messages.append({"role":"user", "content":self.title})
 
         completion = openai.ChatCompletion.create(
