@@ -1,5 +1,3 @@
-import os
-
 import requests
 import streamlit as st
 from openai.error import InvalidRequestError
@@ -39,6 +37,7 @@ class BaitBiterStreamlitApp:
             except requests.JSONDecodeError:
                 st.write("Looks like that's not a valid YouTube URL")
             except BaseException as error:
-                st.write(_ui_text.openai_error_msg(error))
+                st.write(error)
         else:
             _results.display_example_results()
+    

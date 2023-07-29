@@ -2,14 +2,10 @@ import pytest
 from bait_biter._clickbait_video import ClickbaitVideo
 
 
-class MockCompletionResponse:
+class MockCompletionResponse(dict):
     def __init__(self, text):
-        class Choices:
-            def __init__(self, text):
-                self.text = text
-
-        choice_class = Choices(text)
-        self.choices = [choice_class]
+        super().__init__()
+        self["choices"] = [{"message": {"content": text}}]
 
 
 @pytest.fixture(autouse=True)
@@ -17,7 +13,7 @@ def mock_openai_completion(monkeypatch):
     def mock_completion(*args, **kwargs):
         return MockCompletionResponse("mock response")
 
-    monkeypatch.setattr("openai.Completion.create", mock_completion)
+    monkeypatch.setattr("openai.ChatCompletion.create", mock_completion)
 
 
 @pytest.fixture
@@ -37,10 +33,6 @@ def test_clickbait_video_id(clickbait_video):
 def test_video_transcript(clickbait_video):
     with open("tests/sample_transcript.txt", "r") as t:
         assert clickbait_video.transcript == t.read()
-
-
-def test_answer_model_type(clickbait_video):
-    assert clickbait_video.answer_model_type == "text-davinci-003"
 
 
 def test_api_key(clickbait_video):
