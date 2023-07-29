@@ -25,6 +25,10 @@ intro_text = """
 
         Update (22-02-2023):
         - Video transcripts are now stemmed and stopwords are removed before passing them to GPT-3, allowing for longer videos to be analyzed!
+
+        Update (29-07-2023):
+        - Finally updated this to use gpt-3.5 🥲
+        - Extremely long transcripts are now split up, sections are summarized and joined back together. Theoretically, this should allow for videos of any length to be analyzed. 
     """
 
 password_correct = """
