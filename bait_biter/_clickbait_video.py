@@ -126,13 +126,11 @@ class ClickbaitVideo:
                 summary_msgs.append({"role": "user", "content": part})
 
 
-                print(f"Summarization messages:\n{self.messages}")
                 completion = openai.ChatCompletion.create(
                     model=model,
                     messages = summary_msgs
                 )
 
-                print('completion summ', completion)
 
                 summarized_parts.append(completion['choices'][0]['message']['content'])
             
@@ -147,8 +145,6 @@ class ClickbaitVideo:
             model=model,
             messages = self.messages
         )
-        print("all msgs:", self.messages)
-        #print("completion answer_t_q", completion)
 
         return [completion['choices'][0]['message']['content']][0]
 
@@ -170,11 +166,8 @@ class ClickbaitVideo:
             messages = self.messages
         )
 
-        print("Completion _generate_q_from_t", completion)
-
         self.question = completion['choices'][0]['message']['content']
 
-        print(f"self.question: {self.question}")
         self.logger.info(f"Generated question: {self.question}")
         
 
